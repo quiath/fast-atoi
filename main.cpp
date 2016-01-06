@@ -13,14 +13,19 @@
 
 typedef long myint;
 
+// this definition does not work properly for tabs, newlines etc.
+//#define isspace_fast(x) ((x) == ' ')
+
+// "C" locale compatible definition
+#define isspace_fast(x) ((x) == ' ' || (x) == '\t' || (x) == '\n' || (x) == '\v' || (x) == '\f' || (x) == '\r')
+
 myint atoisimple(const char *b)
 {
     myint res = 0; // Initialize result
     int sgn = 1;
 
     // Skip whitespace
-    // TODO: recognize not only spaces
-    for (; *b == ' '; ++b);
+    for (; isspace_fast(*b); ++b);
 
     if (*b == '-')
     {
@@ -52,8 +57,7 @@ myint fastatoi(const char *b)
     int sgn = 1;
 
     // Skip whitespace
-    // TODO: recognize not only spaces
-    for (; *b == ' '; ++b);
+    for (; isspace_fast(*b); ++b);
 
     if (*b == '-')
     {
@@ -85,8 +89,7 @@ myint fastatoiadd(const char *b)
     myint res = 0; // Initialize result
 
     // Skip whitespace
-    // TODO: recognize not only spaces
-    for (; *b == ' '; ++b);
+    for (; isspace_fast(*b); ++b);
 
     if (*b == '-')
     {
@@ -128,8 +131,7 @@ myint fastatoiaddunr(const char *b)
     myint res = 0; // Initialize result
 
     // Skip whitespace
-    // TODO: recognize not only spaces
-    for (; *b == ' '; ++b);
+    for (; isspace_fast(*b); ++b);
 
     if (*b == '-')
     {
