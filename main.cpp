@@ -13,6 +13,39 @@
 
 typedef long myint;
 
+myint atoisimple(const char *b)
+{
+    myint res = 0; // Initialize result
+    int sgn = 1;
+
+    // Skip whitespace
+    // TODO: recognize not only spaces
+    for (; *b == ' '; ++b);
+
+    if (*b == '-')
+    {
+        sgn = -1;
+        ++b;
+    } 
+    else if (*b == '+')
+    {
+        ++b;
+    }
+
+    // Iterate through all characters of input string and update result
+    for (; *b != 0; ++b)
+    {
+        if (*b < '0' || *b > '9') 
+        {
+            return sgn * res;
+        }
+        res = res * 10 + *b - '0';
+    }
+
+    // return result.
+    return sgn * res;
+}
+
 myint fastatoi(const char *b)
 {
     myint res = 0; // Initialize result
@@ -270,6 +303,7 @@ int main(int argc, char* argv[])
       {
           test(N, zero, v, best,            "zero..........");
           test(N, atoi, v, best,            "atoi..........");
+          test(N, atoisimple, v, best,      "atoisimple....");
           test(N, fastatoi, v, best,        "fastatoi......");
           test(N, fastatoiadd, v, best,     "fastatoiadd...");
           test(N, fastatoiaddunr, v, best,  "fastatoiaddunr");
