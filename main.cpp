@@ -386,11 +386,23 @@ int main(int argc, char* argv[])
             std::ofstream f(out_filename.c_str(), std::ios::app | std::ios::out);
             if (!f.fail())
             {
+                if (L == 1)
+                {
+                    // header
+                    f << "\"Length\",\"Digits only\"" ;
+                    for (auto& kv : best)
+                    {
+                         f << ",\"" << kv.first << "\""; 
+                    }
+                    f << std::endl;
+                }
+                f << L << "," << (digits_only ? 1 : 0);
 
-              for (auto& kv : best)
-              {
-                  f << L << "," << (digits_only ? "DO" : "WS" ) << "," << kv.first << "," << kv.second << std::endl;
-              }        
+                for (auto& kv : best)
+                {
+                    f << "," << kv.second;
+                }
+                f << std::endl;
             }
         }
         else
