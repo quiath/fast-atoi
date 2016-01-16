@@ -17,6 +17,14 @@ The atoi() function does the following:
 * additional non-numerich characters are ignored
 * invalid number or no number results in a result of 0
 
+# Performance testing
+
+Here are results for one particular system/compiler/compiler options configuration (full optimization).
+
+CPU time chart: [CPU time chart](CPU.png "Time as measured by CPU")
+
+Elapsed time chart: [Elapsed time chart](Elapsed.png "Time as measured by a wall clock")
+
 # Reference
 
 [C++reference](http://www.cplusplus.com/reference/cstdlib/atoi/)
