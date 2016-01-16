@@ -223,12 +223,12 @@ void test(unsigned long rep,
                      std::setw(10) << et.count() << std::endl;
         if (name.length() > 0)
         {
-          std::string ename = "e." + name;
-          std::string cname = "c." + name;
-          auto bt = best[ename];
-          if (bt == 0 || bt > et.count()) { best[ename] = et.count(); }
-          bt = best[cname];
-          if (bt == 0 || bt > t - t0) { best[cname] = t - t0; }
+            std::string ename = "e." + name;
+            std::string cname = "c." + name;
+            auto bt = best[ename];
+            if (bt == 0 || bt > et.count()) { best[ename] = et.count(); }
+            bt = best[cname];
+            if (bt == 0 || bt > t - t0) { best[cname] = t - t0; }
         }
     }
     catch(std::exception& exc)
@@ -353,48 +353,50 @@ int main(int argc, char* argv[])
     for (size_t L = 1; L <= MAX_WORD_LEN; ++L)
     {
 
-      Name2Time best;
-      std::vector<std::string> v;
-      generate_add(v, WORD_COUNT, L, digits_only);
+        Name2Time best;
+        std::vector<std::string> v;
+        generate_add(v, WORD_COUNT, L, digits_only);
 
 
-      std::cout << "Digits per number: " << L << " The string contains"<< (digits_only ? " digits only" : " whitespace and sign" )<< std::endl; 
-      std::cout << "Int size in bytes:" << sizeof(myint) << std::endl;
-      std::cout << "Loops:" << N << std::endl;
-      std::cout << "Words:" << WORD_COUNT << std::endl;
-      std::cout << "Ramp up:" << std::endl;
-      test(N, atoi, v, best, "");
-      
-      for (int i = 0; i < 3; ++i) 
-      {
-          test(N, zero, v, best,            "zero..........");
-          test(N, atoi, v, best,            "atoi..........");
-          test(N, atoisimple, v, best,      "atoisimple....");
-          test(N, fastatoi, v, best,        "fastatoi......");
-          test(N, fastatoiadd, v, best,     "fastatoiadd...");
-          test(N, fastatoiaddunr, v, best,  "fastatoiaddunr");
-      }
+        std::cout << "Digits per number: " << L << " The string contains"
+                  << (digits_only ? " digits only" : " whitespace and sign" ) << std::endl; 
+        std::cout << "Int size in bytes:" << sizeof(myint) << std::endl;
+        std::cout << "Loops:" << N << std::endl;
+        std::cout << "Words:" << WORD_COUNT << std::endl;
+        std::cout << "Ramp up:" << std::endl;
+        test(N, atoi, v, best, "");
 
-      for (auto& kv : best)
-      {
-        std::cout << "Best: " << kv.first << " : " << std::setw(11) << kv.second << std::endl;
-      }
-
-      if (out_filename.length() > 0) 
-      {
-        std::ofstream f(out_filename.c_str(), std::ios::app | std::ios::out);
-        if (!f.fail())
+        for (int i = 0; i < 3; ++i) 
         {
-          for (auto& kv : best)
-          {
-            f << L << "," << (digits_only ? "DO" : "WS" ) << "," << kv.first << "," << kv.second << std::endl;
-          }        
+            test(N, zero, v, best,            "zero..........");
+            test(N, atoi, v, best,            "atoi..........");
+            test(N, atoisimple, v, best,      "atoisimple....");
+            test(N, fastatoi, v, best,        "fastatoi......");
+            test(N, fastatoiadd, v, best,     "fastatoiadd...");
+            test(N, fastatoiaddunr, v, best,  "fastatoiaddunr");
         }
-      }
-      else
-      {
-        std::cout << "No output file param" << std::endl;
-      }
+
+        for (auto& kv : best)
+        {
+            std::cout << "Best: " << kv.first << " : " << std::setw(11) << kv.second << std::endl;
+        }
+
+        if (out_filename.length() > 0) 
+        {
+            std::ofstream f(out_filename.c_str(), std::ios::app | std::ios::out);
+            if (!f.fail())
+            {
+
+              for (auto& kv : best)
+              {
+                  f << L << "," << (digits_only ? "DO" : "WS" ) << "," << kv.first << "," << kv.second << std::endl;
+              }        
+            }
+        }
+        else
+        {
+          std::cout << "No output file param" << std::endl;
+        }
     
     }
 
