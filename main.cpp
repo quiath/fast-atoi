@@ -40,7 +40,7 @@ myint atoisimple(const char *b)
     // Iterate through all characters of input string and update result
     for (; *b != 0; ++b)
     {
-        if (*b < '0' || *b > '9') 
+        if (*b < '0' || *b > '9')  
         {
             return sgn * res;
         }
@@ -295,6 +295,7 @@ int main(int argc, char* argv[])
     unsigned long N = 10000000UL;
     unsigned WORD_COUNT = 10000;
     bool digits_only = false;
+    bool use_atol = false;
     std::string out_filename = "";
 
     std::vector<std::string> args(argv, argv + argc);
@@ -310,6 +311,11 @@ int main(int argc, char* argv[])
         {
             digits_only = true;
         }
+        if (args[i] == "-a" || args[i] == "--atol")
+        {
+            use_atol = true;
+        }
+
         if ((args[i] == "-l" || args[i] == "--length") && 
             i < args.size()) 
         {
@@ -369,7 +375,14 @@ int main(int argc, char* argv[])
         for (int i = 0; i < 3; ++i) 
         {
             test(N, zero, v, best,            "zero..........");
-            test(N, atoi, v, best,            "atoi..........");
+            if (use_atol)
+            {
+                test(N, atol, v, best,            "atol..........");
+            }
+            else
+            {
+                test(N, atoi, v, best,            "atoi..........");
+            }
             test(N, atoisimple, v, best,      "atoisimple....");
             test(N, fastatoi, v, best,        "fastatoi......");
             test(N, fastatoiadd, v, best,     "fastatoiadd...");
