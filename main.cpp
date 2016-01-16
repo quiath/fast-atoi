@@ -237,15 +237,21 @@ void test(unsigned long rep,
     }
 }
 
-unsigned long N = 10000000UL;
-const unsigned WORD_COUNT = 10000;
-const unsigned MAX_WORD_LEN = 8;
 
 void unit_test()
 {
-    assert(fastatoiaddunr("-10") == atoi("-10"));
-    assert(fastatoiadd("-10") == atoi("-10"));
-    assert(fastatoi("-10") == atoi("-10"));
+    std::vector<myint (*)(const char *)> v = { atoisimple, fastatoi, fastatoiadd, fastatoiaddunr };
+    std::vector<std::string> sv = { "0", " 1", " 2", "\t 3", "4x", "5%", 
+                                    "  10  ", " 99.", "100", "12345", "999999",
+                                    "-1", " -2x", "   +123456+", " -345", "\n\v8I",
+                                    " fake", "values", " +", "    zero  "};
+    for (auto pf : v)
+    {
+       for (const auto s: sv)
+       {
+           assert((*pf)(s.c_str()) == atoi(s.c_str()));
+       }
+    }
 }
 
 void generate_add(std::vector<std::string>& v, int count, int length, bool digits_only)
@@ -285,7 +291,64 @@ void generate_add(std::vector<std::string>& v, int count, int length, bool digit
 
 int main(int argc, char* argv[])
 {
+    unsigned MAX_WORD_LEN = 8;
+    unsigned long N = 10000000UL;
+    unsigned WORD_COUNT = 10000;
     bool digits_only = false;
+    std::string out_filename = "";
+
+    std::vector<std::string> args(argv, argv + argc);
+    int i = 1;
+    while (i < args.size())
+    {
+        if (args[i] == "-t" || args[i] == "--unittest")
+        {
+            unit_test();
+            return 0;
+        }
+        if (args[i] == "-d" || args[i] == "--digitsonly")
+        {
+            digits_only = true;
+        }
+        if ((args[i] == "-l" || args[i] == "--length") && 
+            i < args.size()) 
+        {
+            if ((MAX_WORD_LEN = atoi(args[i + 1].c_str())) > 20 || MAX_WORD_LEN == 0) 
+            {
+                std::cerr << "Invalid length" << std::endl;
+                return 1;
+            }
+            i++;
+        }       
+        if ((args[i] == "-w" || args[i] == "--words") && 
+            i < args.size())
+        {
+            if ((WORD_COUNT = atol(args[i + 1].c_str())) > 1000000 || WORD_COUNT == 0) 
+            {
+                std::cerr << "Invalid word count" << std::endl;
+                return 1;
+            }
+            i++;
+        }
+        if ((args[i] == "-n" || args[i] == "--numloops") && 
+            i < args.size())
+        {
+            if ((N = atol(args[i + 1].c_str())) > 1000000000000UL || N == 0) 
+            {
+                std::cerr << "Invalid number of loops" << std::endl;
+                return 1;
+            }
+            i++;
+        }
+        if ((args[i] == "-o" || args[i] == "--output") && 
+            i < args.size())
+        {
+            out_filename = args[i + 1];
+            i++;
+        }
+
+        i++;
+    }
 
     for (size_t L = 1; L <= MAX_WORD_LEN; ++L)
     {
@@ -297,6 +360,8 @@ int main(int argc, char* argv[])
 
       std::cout << "Digits per number: " << L << " The string contains"<< (digits_only ? " digits only" : " whitespace and sign" )<< std::endl; 
       std::cout << "Int size in bytes:" << sizeof(myint) << std::endl;
+      std::cout << "Loops:" << N << std::endl;
+      std::cout << "Words:" << WORD_COUNT << std::endl;
       std::cout << "Ramp up:" << std::endl;
       test(N, atoi, v, best, "");
       
@@ -315,9 +380,9 @@ int main(int argc, char* argv[])
         std::cout << "Best: " << kv.first << " : " << std::setw(11) << kv.second << std::endl;
       }
 
-      if (argc > 1) 
+      if (out_filename.length() > 0) 
       {
-        std::ofstream f(argv[1], std::ios::app | std::ios::out);
+        std::ofstream f(out_filename.c_str(), std::ios::app | std::ios::out);
         if (!f.fail())
         {
           for (auto& kv : best)
