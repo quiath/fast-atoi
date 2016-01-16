@@ -205,7 +205,6 @@ void test(unsigned long rep,
     try
     {
         const char* b = 0;
-        const char* e = 0;
 
         myint r = 0;
         auto et0 = std::chrono::system_clock::now();
@@ -242,7 +241,7 @@ unsigned long N = 10000000UL;
 const unsigned WORD_COUNT = 10000;
 const unsigned MAX_WORD_LEN = 8;
 
-bool unit_test()
+void unit_test()
 {
     assert(fastatoiaddunr("-10") == atoi("-10"));
     assert(fastatoiadd("-10") == atoi("-10"));
