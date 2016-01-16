@@ -21,9 +21,9 @@ The atoi() function does the following:
 
 Here are results for one particular system/compiler/compiler options configuration (full optimization).
 
-CPU time chart: [CPU time chart](CPU.png "Time as measured by CPU")
+CPU time chart: ![CPU time chart](CPU.png "Time as measured by CPU")
 
-Elapsed time chart: [Elapsed time chart](Elapsed.png "Time as measured by a wall clock")
+Elapsed time chart: ![Elapsed time chart](Elapsed.png "Time as measured by a wall clock")
 
 # Reference
 
